@@ -1,0 +1,65 @@
+.pokemon-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .pokemon-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .pokemon-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    color: #ffffff;
+  }
+  
+  .pokemon-header p {
+    font-size: 1.2rem;
+    color: #9ca3af;
+  }
+  
+  .pokemon-grid {
+    display: grid;
+    gap: 24px;
+    justify-content: center;
+    /* For mobile: 1 column */
+    grid-template-columns: repeat(1, minmax(250px, 1fr));
+  }
+  
+  /* Tablet: 2 columns */
+  @media screen and (min-width: 640px) {
+    .pokemon-grid {
+      grid-template-columns: repeat(2, minmax(250px, 1fr));
+    }
+  }
+  
+  /* Small desktop: 3 columns */
+  @media screen and (min-width: 960px) {
+    .pokemon-grid {
+      grid-template-columns: repeat(3, minmax(250px, 1fr));
+    }
+  }
+  
+  /* Large desktop: 4 columns */
+  @media screen and (min-width: 1280px) {
+    .pokemon-grid {
+      grid-template-columns: repeat(4, minmax(250px, 1fr));
+    }
+  }
+  
+  /* Ensure padding adjusts on smaller screens */
+  @media screen and (max-width: 640px) {
+    .pokemon-container {
+      padding: 16px;
+    }
+    
+    .pokemon-header h1 {
+      font-size: 2rem;
+    }
+    
+    .pokemon-header p {
+      font-size: 1rem;
+    }
+  }

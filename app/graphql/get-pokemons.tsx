@@ -7,7 +7,8 @@ export const GET_POKEMONS = gql`
       name
       maxHP
       maxCP
-      image   
+      image 
+      types  
       attacks {
         special{ 
             name

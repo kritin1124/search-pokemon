@@ -1,0 +1,85 @@
+.pokemon-card {
+    width: 250px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
+    color: white;
+    transition: border-color 0.3s ease;
+    position: relative;
+  }
+  
+  .pokemon-card:hover {
+    border-color: #3b82f6;
+  }
+  
+  .pokemon-number {
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 12px;
+  }
+  
+  .pokemon-image-container {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: #2a2a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  
+  .pokemon-image {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+  
+  .pokemon-image:hover {
+    transform: scale(1.1);
+  }
+  
+  .pokemon-name {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 12px;
+    text-transform: capitalize;
+  }
+  
+  .pokemon-types {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  
+  .type-badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
+  /* Pokemon type colors */
+  .type-grass { background-color: #78c850; }
+  .type-fire { background-color: #f08030; }
+  .type-water { background-color: #6890f0; }
+  .type-electric { background-color: #f8d030; }
+  .type-normal { background-color: #a8a878; }
+  .type-fighting { background-color: #c03028; }
+  .type-flying { background-color: #a890f0; }
+  .type-poison { background-color: #a040a0; }
+  .type-ground { background-color: #e0c068; }
+  .type-rock { background-color: #b8a038; }
+  .type-bug { background-color: #a8b820; }
+  .type-ghost { background-color: #705898; }
+  .type-steel { background-color: #b8b8d0; }
+  .type-psychic { background-color: #f85888; }
+  .type-ice { background-color: #98d8d8; }
+  .type-dragon { background-color: #7038f8; }
+  .type-dark { background-color: #705848; }
+  .type-fairy { background-color: #ee99ac; }
