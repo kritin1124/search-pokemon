@@ -10,15 +10,24 @@ export function HomePage() {
   const [limit, setLimit] = useState<number>(10); 
   const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+
   const { data, fetchMore } = useQuery(GET_POKEMONS, {
     variables: { first: limit },
   });
+  const {data: Alldata} = useQuery(GET_POKEMONS, {
+    variables: {first: 1000}
+  })
 
   useEffect(() => {
-    if (data?.pokemons) {
-      setPokemons(data.pokemons); 
+    if (searchTerm) {
+      setPokemons(Alldata.pokemons)
     }
-  }, [data]);
+    else{
+      if (data?.pokemons) {
+        setPokemons(data.pokemons); 
+      }
+    }
+  }, [data, searchTerm]);
 
   const loadMorePokemons = useCallback(() => {
     if (isFetching) return; 
@@ -38,7 +47,6 @@ export function HomePage() {
     });
   }, [fetchMore, limit, isFetching]);
 
-  
   useEffect(() => {
     function handleScroll() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
@@ -49,13 +57,10 @@ export function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMorePokemons]);
 
-
   const filteredPokemons = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-
-
+  
   return (
     <div className="pokemon-container">
       <div className="pokemon-header">
