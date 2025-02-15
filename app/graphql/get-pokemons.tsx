@@ -9,12 +9,27 @@ export const GET_POKEMONS = gql`
       maxHP
       maxCP
       image 
-      types  
+      types 
       attacks {
         special{ 
             name
             damage
         }   
+      }
+        evolutions{
+        id
+        name
+        number
+        maxHP
+        maxCP
+        image 
+        types
+        attacks {
+        special{ 
+            name
+            damage
+        	}   
+      	}
       }
     }
   }
@@ -35,6 +50,56 @@ export const GET_POKEMON = gql`
           name
           damage
         }
+      }
+      evolutions{
+        id
+        name
+        number
+        maxHP
+        maxCP
+        image 
+        types
+        attacks {
+        special{ 
+            name
+            damage
+        	}   
+      	}
+      }
+    }
+  }
+`;
+
+export const GET_POKEMON_BY_NAME = gql`
+  query GetPokemonByName($name: String!) {
+    pokemon(name: $name) {
+      id
+      name
+      number
+      maxHP
+      maxCP
+      image
+      types
+      attacks {
+        special {
+          name
+          damage
+        }
+      }
+      evolutions{
+        id
+        name
+        number
+        maxHP
+        maxCP
+        image 
+        types
+        attacks {
+        special{ 
+            name
+            damage
+        	}   
+      	}
       }
     }
   }
