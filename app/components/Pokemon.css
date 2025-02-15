@@ -64,6 +64,91 @@
     font-weight: 500;
     text-transform: capitalize;
   }
+  .pokemon-attacks {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 16px 0;
+  }
+  
+  .pokemon-attacks h3 {
+    font-size: 1rem;
+    color: #9ca3af;
+    margin-bottom: 8px;
+  }
+  
+  .attacks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .attack-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+  }
+  
+  .attack-name {
+    font-size: 0.875rem;
+    color: white;
+  }
+  
+  .attack-damage {
+    font-weight: bold;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+  
+  .pokemon-evolutions {
+    margin-top: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+  }
+  
+  .pokemon-evolutions h3 {
+    font-size: 1rem;
+    color: #9ca3af;
+    margin-bottom: 8px;
+  }
+  
+  .evolution-chain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .evolution-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .evolution-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .evolution-name {
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
+  
+  .evolution-arrow {
+    color: #9ca3af;
+    margin: 0 4px;
+  }
+  
   
   /* Pokemon type colors */
   .type-grass { background-color: #78c850; }

@@ -9,6 +9,10 @@ export function Pokemon({ pokemon }: PokemonData) {
         <div className="pokemon-number">
           <p>{pokemon.number}</p>
         </div>
+        <div className="pokemon-cp">
+            <span className="cp-label">MAX CP</span>
+            <span className="cp-value">{pokemon.maxCP}</span>
+          </div>
         <div className="pokemon-image-container">
           <img
             src={pokemon.image}
@@ -27,6 +31,37 @@ export function Pokemon({ pokemon }: PokemonData) {
             </span>
           ))}
         </div>
+        <div className="pokemon-attacks">
+          <h3>Special Attacks</h3>
+          <div className="attacks-list">
+            {pokemon.attacks.special.slice(0, 2).map((attack) => (
+              <div key={attack.name} className="attack-item">
+                <span className="attack-name">{attack.name}</span>
+                <span className="attack-damage">{attack.damage}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {pokemon.evolutions && pokemon.evolutions.length > 0 && (
+          <div className="pokemon-evolutions">
+            <h3>Evolves to</h3>
+            <div className="evolution-chain">
+              {pokemon.evolutions.map((evolution, index) => (
+                <div key={evolution.id} className="evolution-item">
+                  <img
+                    src={evolution.image}
+                    alt={evolution.name}
+                    className="evolution-image"
+                  />
+                  <span className="evolution-name">{evolution.name}</span>
+                  {index < pokemon.evolutions.length - 1 && (
+                    <span className="evolution-arrow">→</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Link>
   );
