@@ -5,6 +5,7 @@ export const GET_POKEMONS = gql`
     pokemons(first: $first) {
       id
       name
+      number
       maxHP
       maxCP
       image 
@@ -14,7 +15,29 @@ export const GET_POKEMONS = gql`
             name
             damage
         }   
-    }
+      }
     }
   }
 `;
+
+export const GET_POKEMON = gql`
+  query GetPokemon($id: String!) {
+    pokemon(id: $id) {
+      id
+      name
+      number
+      maxHP
+      maxCP
+      image
+      types
+      attacks {
+        special {
+          name
+          damage
+        }
+      }
+    }
+  }
+`;
+
+
