@@ -44,6 +44,8 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     margin-bottom: 2rem;
+    cursor: pointer; 
+
 }
 
 .pokemon-detail-container .pokemon-header {
@@ -333,6 +335,7 @@
   .pokemon-detail-container .evolution-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border: solid 2px #3b82f6;
   }
   
   .pokemon-detail-container .evolution-header {
@@ -386,7 +389,11 @@
   
   .pokemon-detail-container .evolution-body {
     padding: 0 1.5rem 1.5rem;
-    background-color: #3b3c3d
+    background-color: #0003
+  }
+  .pokemon-detail-container .evolution-body .pokemon-link{
+    font-size: small;
+    color: #b9babc;
   }
   
   .pokemon-detail-container .evolution-stats {

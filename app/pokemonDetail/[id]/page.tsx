@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "./pokemonDetail.css";
 import { PokemonProps } from "@/app/interfaces/type";
+import Link from "next/link";
 
 function cleanBase64Id(encodedId: string): string {
   return encodedId.replace(/%3D*$/, "");
@@ -48,6 +49,7 @@ export default function PokemonDetail() {
     }
   }, [params.id]);
 
+
   useEffect(() => {
     if (data?.pokemon?.types?.[0]) {
       const type = data.pokemon.types[0].toLowerCase();
@@ -55,14 +57,14 @@ export default function PokemonDetail() {
     }
   }, [data]);
 
-  function getTypeColor(type: string) {
+  const getTypeColor = (type: string) => {
     return typeColorMap[type.toLowerCase()] || "#f0f0f0";
-  }
+  };
 
-  function getTypeColorLight(type: string) {
+  const getTypeColorLight = (type: string) => {
     const baseColor = getTypeColor(type);
-    return `${baseColor}99`; 
-  }
+    return `${baseColor}99`;
+  };
 
   const goToHome = () => {
     router.push("/");
@@ -71,9 +73,9 @@ export default function PokemonDetail() {
   if (!pokemonId) {
     return (
       <div className="error-container">
-        <h2>ไม่พบ ID ของโปเกมอน</h2>
+        <h2>Pokemon ID not found!</h2>
         <button onClick={goToHome} className="back-button">
-          กลับไปหน้าหลัก
+          Back
         </button>
       </div>
     );
@@ -83,7 +85,7 @@ export default function PokemonDetail() {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
-        <p>กำลังโหลดข้อมูล...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -91,14 +93,18 @@ export default function PokemonDetail() {
   if (error || !data?.pokemon) {
     return (
       <div className="error-container">
-        <h2>เกิดข้อผิดพลาด!</h2>
-        <p>{error ? error.message : "ไม่พบข้อมูลโปเกมอน"}</p>
+        <h2>Error!</h2>
+        <p>{error ? error.message : "Pokemon not found!"}</p>
         <button onClick={goToHome} className="back-button">
-          กลับไปหน้าหลัก
+          Back
         </button>
       </div>
     );
   }
+  const goToEvolutionDetail = (id: string) => {
+    console.log("id", id);
+    router.push(`/pokemonDetail/${id}`);
+  };
 
   const pokemon: PokemonProps = data.pokemon;
 
@@ -106,7 +112,7 @@ export default function PokemonDetail() {
     <div className="pokemon-detail-container">
       <button onClick={goToHome} className="back-button">
         <span className="arrow-left"></span>
-        กลับไปหน้าหลัก
+        Back
       </button>
 
       <div className="pokemon-card">
@@ -151,12 +157,17 @@ export default function PokemonDetail() {
                 <span className="info-value">
                   {pokemon.height ? `${pokemon.height.maximum}` : "N/A"}
                 </span>
-                <span className="info-HP"></span>
               </div>
               <div className="info-item">
                 <span className="info-label">Weight: </span>
                 <span className="info-value">
                   {pokemon.weight ? `${pokemon.weight.maximum}` : "N/A"}
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">MAX-HP: </span>
+                <span className="info-value">
+                  {pokemon.maxHP ? `${pokemon.maxHP}` : "N/A"}
                 </span>
               </div>
             </div>
@@ -181,12 +192,14 @@ export default function PokemonDetail() {
               <h2 className="evolutions-title">Evolutions</h2>
               <div className="evolutions-grid">
                 {pokemon.evolutions.map((evolution) => (
-                  <div key={evolution.id} className="evolution-card">
+                  <div
+                    key={evolution.id}
+                    className="evolution-card"
+                    onClick={() => goToEvolutionDetail(evolution.id)}
+                  >
                     <div
                       className="evolution-header"
-                      style={{
-                        backgroundColor: getTypeColor(evolution.types[0]),
-                      }}
+                      style={{ backgroundColor: "#3a4049" }}
                     >
                       <div className="evolution-image-container">
                         <img
@@ -225,6 +238,12 @@ export default function PokemonDetail() {
                             {evolution.maxCP}
                           </span>
                         </div>
+                        <Link
+                          href={`/pokemonDetail/${evolution.id}`}
+                          className="pokemon-link"
+                        >
+                          more details
+                        </Link>
                       </div>
                     </div>
                   </div>

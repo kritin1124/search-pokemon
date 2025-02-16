@@ -1,6 +1,7 @@
 import "./Pokemon.css";
 import Link from "next/link";
 import { PokemonData } from "../interfaces/type";
+import { useRouter } from "next/router";
 
 export function Pokemon({ pokemon }: PokemonData) {
   return (
@@ -8,10 +9,6 @@ export function Pokemon({ pokemon }: PokemonData) {
       <div className="pokemon-card">
         <div className="pokemon-number">
           <p>{pokemon.number}</p>
-        </div>
-        <div className="pokemon-cp">
-            <span className="cp-label">MAX CP</span>
-            <span className="cp-value">{pokemon.maxCP}</span>
         </div>
         <div className="pokemon-image-container">
           <img
