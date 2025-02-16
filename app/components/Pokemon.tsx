@@ -1,7 +1,7 @@
 import "./Pokemon.css";
 import Link from "next/link";
-
 import { PokemonData } from "../interfaces/type";
+
 export function Pokemon({ pokemon }: PokemonData) {
   return (
     <Link href={`/pokemonDetail/${pokemon.id}`} className="pokemon-link">

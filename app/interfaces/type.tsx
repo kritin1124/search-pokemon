@@ -32,3 +32,7 @@ export interface PokemonProps {
 export interface PokemonData {
   pokemon: PokemonProps;
 }
+
+export interface PokemonListData {
+  pokemons: PokemonProps[];
+}

@@ -1,40 +1,63 @@
 import { useQuery } from "@apollo/client";
 import { GET_POKEMONS } from "./graphql/get-pokemons";
 import "./index.css";
-import { PokemonProps } from "./interfaces/type";
+import { PokemonData, PokemonListData, PokemonProps } from "./interfaces/type";
 import Pokemon from "./components/Pokemon";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 export function HomePage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [limit, setLimit] = useState<number>(10); 
+  const [limit, setLimit] = useState<number>(10);
   const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { data, fetchMore } = useQuery(GET_POKEMONS, {
+  const { data, fetchMore } = useQuery<PokemonListData>(GET_POKEMONS, {
     variables: { first: limit },
   });
-  const {data: Alldata} = useQuery(GET_POKEMONS, {
-    variables: {first: 1000}
-  })
+  const { data: Alldata } = useQuery<PokemonListData>(GET_POKEMONS, {
+    variables: { first: 1000 },
+  });
+
+  const updateSearchAndUrl = (newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
+    const params = new URLSearchParams(window.location.search);
+    if (newSearchTerm) {
+      params.set("search", newSearchTerm);
+    } else {
+      params.delete("search");
+    }
+    const newUrl = `${window.location.pathname}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+    window.history.pushState({}, "", newUrl);
+  };
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const searchParam = params.get("search") ?? "";
+      setSearchTerm(searchParam); 
+    };
+    handleUrlChange();
+    window.addEventListener("popstate", handleUrlChange);
+    return () => window.removeEventListener("popstate", handleUrlChange);
+  }, []);
 
   useEffect(() => {
     if (searchTerm) {
-      setPokemons(Alldata.pokemons)
-    }
-    else{
+      setPokemons(Alldata?.pokemons ?? []);
+    } else {
       if (data?.pokemons) {
-        setPokemons(data.pokemons); 
+        setPokemons(data.pokemons);
       }
     }
-  }, [data, searchTerm]);
+  }, [data, Alldata, searchTerm]);
 
   const loadMorePokemons = useCallback(() => {
-    if (isFetching) return; 
-
+    if (isFetching) return;
     setIsFetching(true);
     fetchMore({
-      variables: { first: limit + 10 }, 
+      variables: { first: limit + 10 },
       updateQuery: (prevResult, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prevResult;
         return {
@@ -42,14 +65,17 @@ export function HomePage() {
         };
       },
     }).then(() => {
-      setLimit((prevLimit) => prevLimit + 10); 
+      setLimit((prevLimit) => prevLimit + 10);
       setIsFetching(false);
     });
   }, [fetchMore, limit, isFetching]);
 
   useEffect(() => {
     function handleScroll() {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 500
+      ) {
         loadMorePokemons();
       }
     }
@@ -57,10 +83,14 @@ export function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMorePokemons]);
 
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    updateSearchAndUrl(e.target.value);
+  };
+
   const filteredPokemons = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   return (
     <div className="pokemon-container">
       <div className="pokemon-header">
@@ -70,9 +100,7 @@ export function HomePage() {
           type="text"
           placeholder="Search Pokemon..."
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-          }}
+          onChange={handleSearchChange}
           className="search-input"
         />
       </div>
