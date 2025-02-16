@@ -14,6 +14,7 @@ export function HomePage() {
   const { data, fetchMore } = useQuery<PokemonListData>(GET_POKEMONS, {
     variables: { first: limit },
   });
+
   const { data: Alldata } = useQuery<PokemonListData>(GET_POKEMONS, {
     variables: { first: 1000 },
   });
