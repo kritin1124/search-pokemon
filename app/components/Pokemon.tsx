@@ -1,7 +1,6 @@
 import "./Pokemon.css";
 import Link from "next/link";
 import { PokemonData } from "../interfaces/type";
-import { useRouter } from "next/router";
 
 export function Pokemon({ pokemon }: PokemonData) {
   return (
@@ -12,6 +11,7 @@ export function Pokemon({ pokemon }: PokemonData) {
         </div>
         <div className="pokemon-image-container">
           <img
+            data-testid="pokemon-image"
             src={pokemon.image}
             alt={pokemon.name}
             className="pokemon-image"
@@ -46,6 +46,7 @@ export function Pokemon({ pokemon }: PokemonData) {
               {pokemon.evolutions.map((evolution, index) => (
                 <div key={evolution.id} className="evolution-item">
                   <img
+                    data-testid="evolution-image"
                     src={evolution.image}
                     alt={evolution.name}
                     className="evolution-image"

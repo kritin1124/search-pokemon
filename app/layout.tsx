@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { ApolloProviderWrapper } from "@/app/providers/ApolloProvider";
 import "./globals.css";
 

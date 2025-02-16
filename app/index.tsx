@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_POKEMONS } from "./graphql/get-pokemons";
 import "./index.css";
-import { PokemonData, PokemonListData, PokemonProps } from "./interfaces/type";
+import { PokemonListData, PokemonProps } from "./interfaces/type";
 import Pokemon from "./components/Pokemon";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
@@ -111,7 +111,7 @@ export function HomePage() {
       </div>
       {filteredPokemons.length === 0 && (
         <div className="no-results">
-          No Pokemon found matching "{searchTerm}"
+          No Pokemon found matching {searchTerm}
         </div>
       )}
     </div>
