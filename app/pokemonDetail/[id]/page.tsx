@@ -5,24 +5,10 @@ import { useQuery } from "@apollo/client";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "./pokemonDetail.css";
+import { PokemonProps } from "@/app/interfaces/type";
 
 function cleanBase64Id(encodedId: string): string {
   return encodedId.replace(/%3D*$/, "");
-}
-
-interface Pokemon {
-  id: string;
-  name: string;
-  image: string;
-  number: string;
-  types: string[];
-  height: number;
-  weight: number;
-  abilities: string[];
-  stats: {
-    name: string;
-    value: number;
-  }[];
 }
 
 const typeColorMap: Record<string, string> = {
@@ -54,7 +40,6 @@ export default function PokemonDetail() {
 
   const { data, loading, error } = useQuery(GET_POKEMON, {
     variables: { id: pokemonId },
-    skip: !pokemonId, // ข้าม query ถ้ายังไม่มี pokemonId
   });
 
   useEffect(() => {
@@ -70,8 +55,17 @@ export default function PokemonDetail() {
     }
   }, [data]);
 
+  function getTypeColor(type: string) {
+    return typeColorMap[type.toLowerCase()] || "#f0f0f0";
+  }
+
+  function getTypeColorLight(type: string) {
+    const baseColor = getTypeColor(type);
+    return `${baseColor}99`; 
+  }
+
   const goToHome = () => {
-    router.push('/');
+    router.push("/");
   };
 
   if (!pokemonId) {
@@ -106,7 +100,7 @@ export default function PokemonDetail() {
     );
   }
 
-  const pokemon: Pokemon = data.pokemon;
+  const pokemon: PokemonProps = data.pokemon;
 
   return (
     <div className="pokemon-detail-container">
@@ -116,68 +110,123 @@ export default function PokemonDetail() {
       </button>
 
       <div className="pokemon-card">
-        <div className="pokemon-header" style={{ backgroundColor: mainColor }}>
+        <div className="pokemon-header">
           <div className="pokemon-image-container">
-            <img src={pokemon.image} alt={pokemon.name} className="pokemon-image" />
+            <img
+              src={pokemon.image}
+              alt={pokemon.name}
+              className="pokemon-image"
+            />
           </div>
-          
+
           <div className="pokemon-title">
-            <span className="pokemon-number">#{pokemon.number || 'N/A'}</span>
+            <span className="pokemon-number">#{pokemon.number || "N/A"}</span>
             <h1 className="pokemon-name">{pokemon.name}</h1>
-            
+            <div className="pokemon-cp">
+              <span className="cp-label">MAX CP: </span>
+              <span className="cp-value">{pokemon.maxCP}</span>
+            </div>
+
             <div className="pokemon-types">
-              {pokemon.types && pokemon.types.map((type, index) => (
-                <span key={index} className={`type-badge ${type.toLowerCase()}`}>
-                  {type}
-                </span>
-              ))}
+              {pokemon.types &&
+                pokemon.types.map((type, index) => (
+                  <span
+                    key={index}
+                    className={`type-badge ${type.toLowerCase()}`}
+                    style={{ backgroundColor: getTypeColorLight(type) }}
+                  >
+                    {type}
+                  </span>
+                ))}
             </div>
           </div>
         </div>
 
         <div className="pokemon-info">
           <div className="info-section">
-            <h2 style={{ borderBottomColor: mainColor }}>ข้อมูลพื้นฐาน</h2>
+            <h2 style={{ borderBottomColor: mainColor }}>Information </h2>
             <div className="info-grid">
               <div className="info-item">
-                <span className="info-label">ส่วนสูง:</span>
-                <span className="info-value">{pokemon.height ? `${pokemon.height / 10} m` : 'N/A'}</span>
+                <span className="info-label">Height: </span>
+                <span className="info-value">
+                  {pokemon.height ? `${pokemon.height.maximum}` : "N/A"}
+                </span>
+                <span className="info-HP"></span>
               </div>
               <div className="info-item">
-                <span className="info-label">น้ำหนัก:</span>
-                <span className="info-value">{pokemon.weight ? `${pokemon.weight / 10} kg` : 'N/A'}</span>
+                <span className="info-label">Weight: </span>
+                <span className="info-value">
+                  {pokemon.weight ? `${pokemon.weight.maximum}` : "N/A"}
+                </span>
               </div>
             </div>
           </div>
 
-          {pokemon.abilities && pokemon.abilities.length > 0 && (
+          {pokemon.attacks && pokemon.attacks.special.length > 0 && (
             <div className="info-section">
-              <h2 style={{ borderBottomColor: mainColor }}>ความสามารถ</h2>
+              <h2 style={{ borderBottomColor: mainColor }}>Special Attack</h2>
               <ul className="abilities-list">
-                {pokemon.abilities.map((ability, index) => (
-                  <li key={index} className="ability-item">{ability}</li>
+                {pokemon.attacks.special.map((ability, index) => (
+                  <li key={index} className="ability-item">
+                    {ability.name}
+                    <span className="damage">({ability.damage})</span>{" "}
+                  </li>
                 ))}
               </ul>
             </div>
           )}
 
-          {pokemon.stats && pokemon.stats.length > 0 && (
-            <div className="info-section">
-              <h2 style={{ borderBottomColor: mainColor }}>สถิติ</h2>
-              <div className="stats-container">
-                {pokemon.stats.map((stat, index) => (
-                  <div key={index} className="stat-item">
-                    <span className="stat-name">{stat.name}</span>
-                    <div className="stat-bar-container">
-                      <div 
-                        className="stat-bar"
-                        style={{ 
-                          width: `${Math.min(100, (stat.value / 255) * 100)}%`,
-                          backgroundColor: mainColor
-                        }}
-                      ></div>
+          {pokemon.evolutions && pokemon.evolutions.length > 0 && (
+            <div className="evolutions-section">
+              <h2 className="evolutions-title">Evolutions</h2>
+              <div className="evolutions-grid">
+                {pokemon.evolutions.map((evolution) => (
+                  <div key={evolution.id} className="evolution-card">
+                    <div
+                      className="evolution-header"
+                      style={{
+                        backgroundColor: getTypeColor(evolution.types[0]),
+                      }}
+                    >
+                      <div className="evolution-image-container">
+                        <img
+                          src={evolution.image}
+                          alt={evolution.name}
+                          className="evolution-image"
+                        />
+                      </div>
+                      <h3 className="evolution-name">{evolution.name}</h3>
+                      <span className="evolution-number">
+                        #{evolution.number}
+                      </span>
+                      <div className="evolution-types">
+                        {evolution.types.map((type, index) => (
+                          <span
+                            key={index}
+                            className="evolution-type-badge"
+                            style={{ backgroundColor: getTypeColorLight(type) }}
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <span className="stat-value">{stat.value}</span>
+                    <div className="evolution-body">
+                      <div className="evolution-stats">
+                        <div className="evolution-stat-item">
+                          <span className="evolution-stat-label">Max HP: </span>
+                          <span className="evolution-stat-value">
+                            {evolution.maxHP}
+                          </span>
+                        </div>
+                        <div className="evolution-stat-item">
+                          <span className="evolution-stat-label">Max CP: </span>
+                          <span className="evolution-stat-value">
+                            {evolution.maxCP}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

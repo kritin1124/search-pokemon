@@ -45,6 +45,14 @@ export const GET_POKEMON = gql`
       maxCP
       image
       types
+      height {
+        minimum
+        maximum
+      }
+      weight {
+        minimum
+        maximum
+      }
       attacks {
         special {
           name

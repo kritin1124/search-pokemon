@@ -12,7 +12,7 @@ export function Pokemon({ pokemon }: PokemonData) {
         <div className="pokemon-cp">
             <span className="cp-label">MAX CP</span>
             <span className="cp-value">{pokemon.maxCP}</span>
-          </div>
+        </div>
         <div className="pokemon-image-container">
           <img
             src={pokemon.image}

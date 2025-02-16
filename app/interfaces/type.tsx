@@ -6,6 +6,15 @@ export interface PokemonProps {
   maxHP: number;
   maxCP: number;
   image: string;
+  height: {
+    minimum: number;
+    maximum: number;
+  };
+  weight: {
+    minimum: number;
+    maximum: number;
+  };
+  classification: string;
   attacks: {
     special: Array<{
       name: string;
