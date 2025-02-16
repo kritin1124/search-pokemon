@@ -94,8 +94,6 @@ export function HomePage() {
   return (
     <div className="pokemon-container">
       <div className="pokemon-header">
-        <h1>My Pokemon</h1>
-        <p>Here are my pokemon:</p>
         <input
           type="text"
           placeholder="Search Pokemon..."
