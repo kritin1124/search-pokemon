@@ -1,5 +1,4 @@
 'use client'
-import { ApolloProviderWrapper } from "@/app/providers/ApolloProvider";
 import "./globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
