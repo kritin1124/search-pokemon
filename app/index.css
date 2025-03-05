@@ -1,3 +1,4 @@
+
 .pokemon-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -46,6 +47,13 @@
   
   .search-input::placeholder {
     color: #6b7280;
+  }
+
+  .loading{
+    color: #ffffff;
+  }
+  .no-results{
+    color: #ffffff;
   }
   
   

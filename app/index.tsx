@@ -10,6 +10,7 @@ export function HomePage() {
   const [limit, setLimit] = useState<number>(10);
   const [pokemons, setPokemons] = useState<PokemonProps[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data, fetchMore } = useQuery<PokemonListData>(GET_POKEMONS, {
     variables: { first: limit },
@@ -19,25 +20,13 @@ export function HomePage() {
     variables: { first: 1000 },
   });
 
-  const updateSearchAndUrl = (newSearchTerm: string) => {
-    setSearchTerm(newSearchTerm);
-    const params = new URLSearchParams(window.location.search);
-    if (newSearchTerm) {
-      params.set("search", newSearchTerm);
-    } else {
-      params.delete("search");
-    }
-    const newUrl = `${window.location.pathname}${
-      params.toString() ? `?${params.toString()}` : ""
-    }`;
-    window.history.pushState({}, "", newUrl);
-  };
+
 
   useEffect(() => {
     const handleUrlChange = () => {
       const params = new URLSearchParams(window.location.search);
       const searchParam = params.get("search") ?? "";
-      setSearchTerm(searchParam); 
+      setSearchTerm(searchParam);
     };
     handleUrlChange();
     window.addEventListener("popstate", handleUrlChange);
@@ -47,28 +36,33 @@ export function HomePage() {
   useEffect(() => {
     if (searchTerm) {
       setPokemons(Alldata?.pokemons ?? []);
+      setIsLoading(true);
     } else {
       if (data?.pokemons) {
         setPokemons(data.pokemons);
+        setIsLoading(true);
+
       }
     }
   }, [data, Alldata, searchTerm]);
 
   const loadMorePokemons = useCallback(() => {
-    if (isFetching) return;
-    setIsFetching(true);
-    fetchMore({
-      variables: { first: limit + 10 },
-      updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prevResult;
-        return {
-          pokemons: fetchMoreResult.pokemons,
-        };
-      },
-    }).then(() => {
-      setLimit((prevLimit) => prevLimit + 10);
-      setIsFetching(false);
-    });
+    if (isFetching) { return; }
+    else {
+      setIsFetching(true);
+      fetchMore({
+        variables: { first: limit + 10 },
+        updateQuery: (prevResult, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prevResult;
+          return {
+            pokemons: fetchMoreResult.pokemons,
+          };
+        },
+      }).then(() => {
+        setLimit((prevLimit) => prevLimit + 10);
+        setIsFetching(false);
+      });
+    }
   }, [fetchMore, limit, isFetching]);
 
   useEffect(() => {
@@ -84,6 +78,20 @@ export function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMorePokemons]);
 
+
+
+  const updateSearchAndUrl = (newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
+    const params = new URLSearchParams(window.location.search);
+    if (newSearchTerm) {
+      params.set("search", newSearchTerm);
+    } else {
+      params.delete("search");
+    }
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""
+      }`;
+    window.history.pushState({}, "", newUrl);
+  };
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>): void => {
     updateSearchAndUrl(e.target.value);
   };
@@ -93,7 +101,9 @@ export function HomePage() {
   );
 
   return (
+
     <div className="pokemon-container">
+
       <div className="pokemon-header">
         <input
           type="text"
@@ -109,11 +119,14 @@ export function HomePage() {
           <Pokemon key={pokemon.id} pokemon={pokemon} />
         ))}
       </div>
-      {filteredPokemons.length === 0 && (
+      {isFetching && filteredPokemons.length === 0 && (
         <div className="no-results">
+
           No Pokemon found matching {searchTerm}
         </div>
       )}
+      {!isLoading ? (<div className="loading">Loading...</div>) : null}
+
     </div>
   );
 }
